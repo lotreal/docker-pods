@@ -2,23 +2,22 @@ package main
 
 import (
         "log"
-	"os"
 
 	"github.com/lotreal/docker-pods/command"
+	"github.com/lotreal/docker-pods/convention"
 )
 
 
 func main() {
-	pwd, err := os.Getwd()
+	pods_yaml, err := convention.Pods()
 	if err != nil {
 		log.Fatalf("error: %v", err)
 	}
 
-	command, err := command.Run(pwd + "/pods.yaml1")
+	command, err := command.Run(pods_yaml)
 	if err != nil {
 		log.Fatalf("error: %v", err)
 	}
 
-	command.Print()
-
+	command.Exec()
 }

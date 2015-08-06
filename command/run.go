@@ -3,26 +3,11 @@ package command
 import (
         "fmt"
 	"io/ioutil"
-	// "os/exec"
 	"strings"
 
 	"github.com/lotreal/docker-pods/pods"
 )
 
-type Command struct {
-	command string
-}
-
-func (c *Command) Print() {
-	fmt.Printf("%s", c.command)
-}
-
-
-// out, err := exec.Command("sh", "-c", command).Output()
-// if err != nil {
-// 	fmt.Printf("%s", err)
-// }
-// fmt.Printf("%s", out)
 
 
 func Run(yaml string) (Command, error) {
