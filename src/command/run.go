@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"strings"
 
-	"github.com/lotreal/docker-pods/pods"
+	"github.com/lotreal/docker-pods/src/pods"
 )
 
 
@@ -40,6 +40,6 @@ func Run(yaml string) (Command, error) {
 
 	args = append(args, ct.Image)
 
-	command := Command{ command: strings.Join(args, " ") }
+	command := Command{ command: strings.Join(args, " \\\n") }
 	return command, nil
 }

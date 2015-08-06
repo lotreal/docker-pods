@@ -3,8 +3,8 @@ package main
 import (
         "log"
 
-	"github.com/lotreal/docker-pods/command"
-	"github.com/lotreal/docker-pods/convention"
+	"github.com/lotreal/docker-pods/src/command"
+	"github.com/lotreal/docker-pods/src/convention"
 )
 
 
