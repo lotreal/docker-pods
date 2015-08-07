@@ -1,22 +1,40 @@
 package main
 
 import (
-	"log"
+	"fmt"
+	"os"
 
-	"github.com/lotreal/docker-pods/src/command"
-	"github.com/lotreal/docker-pods/src/convention"
+	"github.com/codegangsta/cli"
+
+	"github.com/lotreal/docker-pods/src/pods"
 )
 
 func main() {
-	pods_yaml, err := convention.Pods()
-	if err != nil {
-		log.Fatalf("error: %v", err)
-	}
+	app := cli.NewApp()
+	app.Name = "docker-pods"
+	app.Usage = "manage your dockers"
+	app.Version = "0.0.1"
+	app.Commands = []cli.Command{
+		{
+			Name:    "run",
+			Aliases: []string{"r"},
+			Usage:   "docker run a pod",
+			Action: func(c *cli.Context) {
+				// pods.Run(c.Args().First())
 
-	command, err := command.Run(pods_yaml)
-	if err != nil {
-		log.Fatalf("error: %v", err)
+				fmt.Printf("%#v\n", c.Args().First())
+				fmt.Printf("%#v\n", c.Args().Present())
+				println("added task: ", c.Args().First())
+			},
+		},
+		{
+			Name:    "status",
+			Aliases: []string{"s"},
+			Usage:   "list pods",
+			Action: func(c *cli.Context) {
+				pods.Status()
+			},
+		},
 	}
-
-	command.Exec()
+	app.Run(os.Args)
 }
