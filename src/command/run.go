@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"strings"
 
-	"github.com/lotreal/docker-pods/src/pods"
+	"github.com/lotreal/docker-pods/src/define"
 )
 
 
@@ -16,12 +16,12 @@ func Run(yaml string) (Command, error) {
 		return Command{}, err
         }
 
-	var p pods.Pod
+	var p define.Pod
 	if err = p.Parse(data); err != nil {
 		return Command{}, err
 	}
 
-	ct := p.DesiredState.Manifest.Containers[0]
+	ct := p.Spec.Containers[0]
 
 	args := []string{}
 	args = append(args, "/usr/bin/docker run -d")
@@ -30,8 +30,9 @@ func Run(yaml string) (Command, error) {
 		args = append(args, fmt.Sprintf("-p \"%v:%v\"", s.HostPort, s.ContainerPort))
 	}
 
+	fmt.Printf("env: %v", ct.Env)
 	for _,s := range ct.Env {
-		args = append(args, fmt.Sprintf("-e \"%v=%v\"", s.Key, s.Value))
+		args = append(args, fmt.Sprintf("-e \"%v=%v\"", s.Name, s.Value))
 	}
 
 	for _,s := range ct.VolumeMounts {

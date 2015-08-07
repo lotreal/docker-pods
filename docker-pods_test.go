@@ -1,17 +1,16 @@
 package main
 
 import (
+	"fmt"
 	"log"
+	"testing"
 
 	"github.com/lotreal/docker-pods/src/command"
-	"github.com/lotreal/docker-pods/src/convention"
 )
 
-func main() {
-	pods_yaml, err := convention.Pods()
-	if err != nil {
-		log.Fatalf("error: %v", err)
-	}
+func TestReverse(t *testing.T) {
+	fmt.Print("test")
+	pods_yaml := "./examples/hello-world.yaml"
 
 	command, err := command.Run(pods_yaml)
 	if err != nil {
@@ -19,4 +18,5 @@ func main() {
 	}
 
 	command.Exec()
+	// t.Errorf("Reverse(%q) == %q, want %q", c.in, got, c.want)
 }

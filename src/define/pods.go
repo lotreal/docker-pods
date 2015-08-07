@@ -1,15 +1,29 @@
-package pods
+package define
 
 import (
+
 	"errors"
 
         "gopkg.in/yaml.v2"
 )
 
+
 type Port struct {
         ContainerPort int `yaml:"containerPort"`
 	HostPort int `yaml:"hostPort"`
 }
+
+// func (p *Port) ContainerPort() int {
+// 	fmt.Printf("port: %v", p)
+// 	return p.containerPort
+// }
+
+// func (p *Port) HostPort() int {
+// 	if p.hostPort == 0 {
+// 		return p.ContainerPort
+// 	}
+// 	return p.hostPort
+// }
 
 type VolumeMounts struct {
         Name string
@@ -18,7 +32,7 @@ type VolumeMounts struct {
 }
 
 type Env struct {
-        Key string
+        Name string
 	Value string
 }
 
@@ -32,13 +46,10 @@ type Container struct {
 }
 
 type Pod struct {
-	Id string
 	Kind string
-	DesiredState struct {
-		Manifest struct {
-			Containers []Container
-		}
-	} `yaml:"desiredState"`
+	Spec struct {
+		Containers []Container
+	}
 }
 
 func (p *Pod) Parse(data []byte) error {
