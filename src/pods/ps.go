@@ -6,6 +6,7 @@ import (
 	// "text/tabwriter"
 
 	"github.com/lotreal/docker-pods/src/docker"
+	"github.com/lotreal/docker-pods/src/sh"
 )
 
 
@@ -31,6 +32,8 @@ func Ps() []PsOutput {
 			Ip:          docker.InspectIp(cid),
 		})
 	}
+
+	sh.TabWrite(status)
 
 	return status
 
