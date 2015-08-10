@@ -1,6 +1,7 @@
 package sh
 
 import (
+	"io"
         "testing"
 
 	"github.com/lotreal/docker-pods/src/sh"
@@ -38,16 +39,23 @@ type Status struct {
 
 
 func TestPs(t *testing.T) {
-	status := Status{}
-	var reader = sh.NewReader(ps, status)
+	var reader = sh.NewReader(ps, Status{})
 
-	for i := 0; i < reader.Line; i++ {
-		var test Status
-		err := sh.Unmarshal(reader, reader.R[i], &test)
+	var status []Status
+	status = make([]Status, 0)
+
+	for {
+		var s Status
+		err := sh.Unmarshal(reader, &s)
+
+		if err == io.EOF {
+			break
+		}
 		if err != nil {
 			panic(err)
 		}
-
-		t.Logf("%#v", test)
+		t.Logf("%#v", s)
+		status = append(status, s)
 	}
+	// t.Logf("%#v", status)
 }

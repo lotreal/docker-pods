@@ -2,7 +2,7 @@ package sh
 
 import (
 	"errors"
-        "fmt"
+	"io"
 	"reflect"
 	"strings"
 )
@@ -14,10 +14,11 @@ type Field struct {
 }
 
 type Reader struct {
-	Line   int
-	column int
-	fields []Field
-	R      []string
+	pointer int
+	Line    int
+	column  int
+	fields  []Field
+	R       []string
 }
 
 func NewReader(in []string, pattern interface{}) *Reader {
@@ -57,28 +58,25 @@ func NewReader(in []string, pattern interface{}) *Reader {
 	}
 }
 
-// func TabReader(in []string) {
-// 	for i := 0; i < len(in); i++ {
-// 		fmt.Println(in[i])
-// 	}
-// 	// lines := strings.Split(string(in[:]), "\n")
-// 	// fmt.Printf("in: %#v", lines)
+func (r *Reader) Read() (record string, err error) {
+	record = ""
+	if r.pointer <= r.Line {
+		record = r.R[r.pointer]
+		r.pointer++
+		return record, nil
+	}
+	return record, io.EOF
+}
 
-// 	// ins := Status{}
-// 	// rt  := reflect.TypeOf(ins)
-// 	// fmt.Printf("%#v", rt.NumField())
-
-
-// 	// fmt.Printf("in: %#v", in)
-// 	// n := SliceIndex(len(in), func(i int) bool { return in[i] == 0xa })
-// 	// s := string(in[:n])
-// 	// fmt.Printf("line 1: %v", s)
-// }
-
-func Unmarshal(reader *Reader, record string, v interface{}) error {
+func Unmarshal(reader *Reader, v interface{}) error {
+	record, err := reader.Read()
+	if err != nil {
+		return err
+	}
 	if record == "" {
 		return errors.New("record is empty")
 	}
+
 	s := reflect.ValueOf(v).Elem()
 	for i := 0; i < s.NumField(); i++ {
 		f := s.Field(i)
@@ -95,7 +93,6 @@ func Unmarshal(reader *Reader, record string, v interface{}) error {
 		}
 
 		f.SetString(strings.Trim(value, " "))
-		fmt.Println(reader.fields[i]);
 	}
 	return nil
 }
