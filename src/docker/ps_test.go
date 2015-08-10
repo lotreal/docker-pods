@@ -6,6 +6,10 @@ import (
 	"github.com/lotreal/docker-pods/src/docker"
 )
 
-func TestPs(t *testing.T) {
-	t.Errorf("%s", docker.Ps())
+func TestStatus(t *testing.T) {
+	status := docker.Ps()
+	t.Log("$ docker ps -a")
+	for i := 0; i < len(status); i++ {
+		t.Logf("%#v", status[i])
+	}
 }
