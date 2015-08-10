@@ -1,14 +1,14 @@
-package docker_test
+package pods_test
 
 import (
 	"testing"
 
-	"github.com/lotreal/docker-pods/src/docker"
+	"github.com/lotreal/docker-pods/src/pods"
 )
 
 func TestPs(t *testing.T) {
-	status := docker.Ps()
-	t.Log("$ docker ps -a")
+	status := pods.Ps()
+	t.Log("$ docker-pods ps")
 	for i := 0; i < len(status); i++ {
 		t.Logf("%#v", status[i])
 	}
