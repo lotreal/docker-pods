@@ -1,3 +1,14 @@
+GO ?= go
+GOPATH := $(CURDIR)/_vendor:$(GOPATH)
+
+all: build
+
+build:
+	$(GO) build
+
+install:
+	$(GO) install
+
 .PHONY: install-deps
 install-deps:
 	go get gopkg.in/yaml.v2

@@ -1,7 +1,6 @@
 package define
 
 import (
-
 	"errors"
 
         "gopkg.in/yaml.v2"
