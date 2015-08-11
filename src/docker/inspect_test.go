@@ -9,8 +9,6 @@ import (
 )
 
 var busybox = (func() string {
-	return "5ccac93e27e25b836878a0cc7d18a2882605d85ae3c8bc347924aef343022c26"[0:12]
-
 	cmd := sh.Command{"docker run -d -it busybox sh"}
 	return cmd.Run()[0][0:12]
 })()
@@ -21,35 +19,19 @@ func TestInit(t *testing.T) {
 }
 
 func TestIp(t *testing.T) {
-	script := fmt.Sprintf("docker inspect --format='{{.NetworkSettings.IPAddress}}' %s", busybox)
-	cmd := sh.Command{script}
-	t.Log(cmd.Run())
+	t.Log(docker.InspectIp(busybox))
 }
 
 func TestPort(t *testing.T) {
-	script := fmt.Sprintf("docker inspect --format='{{range $p, $conf := .NetworkSettings.Ports}} {{$p}} -> {{(index $conf 0).HostPort}} {{end}}' %s", busybox)
-	cmd := sh.Command{script}
-	t.Log(cmd.Run())
+	t.Log(docker.InspectPorts(busybox))
 }
 
 func TestState(t *testing.T) {
-	script := fmt.Sprintf("docker inspect --format='{{.State.Running}}' %s", busybox)
-	cmd := sh.Command{script}
-	t.Log(cmd.Run())
-}
-
-
-func TestSn2(t *testing.T) {
-	// script := fmt.Sprintf("", busybox)
-	// cmd := sh.Command{script}
-	// t.Log(cmd.Run())
-
-	t.Logf("%#v", 2)
+	t.Log(docker.InspectPorts(busybox))
 }
 
 func TestRm(t *testing.T) {
 	script := fmt.Sprintf("docker rm -f %s", busybox)
-	t.Log(script)
-	// cmd := sh.Command{script}
-	// t.Log(cmd.Run())
+	cmd := sh.Command{script}
+	t.Log(cmd.Run())
 }
