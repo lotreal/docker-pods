@@ -13,3 +13,7 @@ func TestPs(t *testing.T) {
 		t.Logf("%#v", status[i])
 	}
 }
+
+func TestPs2(t *testing.T) {
+	pods.Ps()
+}

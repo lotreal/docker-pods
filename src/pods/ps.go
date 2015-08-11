@@ -11,9 +11,14 @@ import (
 
 
 type PsOutput struct {
-	Pid         string
-	ContainerId string
-	Ip          string
+	Running     string `field:"RUNNING"`
+	Pid         string `field:"PODS ID"`
+	ContainerId string `field:"CONTAINER ID"`
+	Ip          string `field:"IP ADDR"`
+	Image       string `field:"IMAGE"`
+	Command     string `field:"COMMAND"`
+	Status      string `field:"STATUS"`
+	Ports       string `field:"PORTS"`
 }
 
 
@@ -27,33 +32,18 @@ func Ps() []PsOutput {
 		cid := p.ContainerId
 
 		status = append(status, PsOutput{
+			Running:      docker.InspectRunning(cid),
 			Pid:         docker.InspectPid(cid),
 			ContainerId: cid,
 			Ip:          docker.InspectIp(cid),
+			Image:       p.Image,
+			Command:     p.Command,
+			Ports:       p.Ports,
+			Status:      p.Status,
 		})
 	}
 
 	sh.TabWrite(status)
 
 	return status
-
-	// w := new(tabwriter.Writer)
-
-	// // Format in tab-separated columns with a tab stop of 8.
-	// w.Init(os.Stdout, 0, 8, 2, '\t', 0)
-	// fmt.Fprintln(w, "LABEL\tREPLICAS\tSTATUS\td")
-	// fmt.Fprintln(w, "maokai\t2\trunning\t123456789")
-	// fmt.Fprintln(w)
-	// w.Flush()
-
-	// cmd := sh.Command{"docker ps"}
-	// cmd.Exec()
-
-	// xs := []int{2, 4, 6, 8}
-	// ys := []string{"C", "B", "K", "A"}
-	// fmt.Println(
-	// 	SliceIndex(len(xs), func(i int) bool { return xs[i] == 5 }),
-	// 	SliceIndex(len(xs), func(i int) bool { return xs[i] == 6 }),
-	// 	SliceIndex(len(ys), func(i int) bool { return ys[i] == "Z" }),
-	// 	SliceIndex(len(ys), func(i int) bool { return ys[i] == "A" }))
 }

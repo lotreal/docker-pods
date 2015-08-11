@@ -2,27 +2,14 @@ package sh
 
 import (
 	"fmt"
+	"os"
+	"strings"
+	"text/tabwriter"
 	"reflect"
 )
 
-// func InterfaceSlice(in inteface{}) []interface{} {
-// 	s := reflect.ValueOf(in)
-// 	if s.Kind() != reflect.Slice {
-// 		panic("InterfaceSlice() given a non-slice type")
-// 	}
-
-// 	ret := make([]interface{}, s.Len())
-
-// 	for i:=0; i<s.Len(); i++ {
-// 		ret[i] = s.Index(i).Interface()
-// 	}
-
-// 	return ret
-// }
-
-func TabWrite(v interface{}) {
-
-	s := reflect.ValueOf(v)
+func InterfaceSlice(in interface{}) []interface{} {
+	s := reflect.ValueOf(in)
 	if s.Kind() != reflect.Slice {
 		panic("InterfaceSlice() given a non-slice type")
 	}
@@ -33,41 +20,46 @@ func TabWrite(v interface{}) {
 		ret[i] = s.Index(i).Interface()
 	}
 
-	fmt.Printf("%#v", ret)
-	// for i, val := range v {
-	// 	fmt.Printf("%s", val)
+	return ret
+}
 
-	// }
-	// s  := reflect.ValueOf(v)
-	// st := reflect.TypeOf(v)
+func Struct2Array(x interface{}) []string {
+	v := reflect.ValueOf(x)
 
-	// fmt.Printf("%s", v)
-	// fmt.Printf("value: %#v", s)
-	// fmt.Printf("type: %#v", st)
-	// record, err := reader.Read()
-	// if err != nil {
-	// 	return err
-	// }
-	// if record == "" {
-	// 	return errors.New("record is empty")
-	// }
+	values := make([]string, v.NumField())
 
-	// s := reflect.ValueOf(v).Elem()
-	// for i := 0; i < s.NumField(); i++ {
-	// 	f := s.Field(i)
+	for i := 0; i < v.NumField(); i++ {
+		values[i] = string(v.Field(i).Interface().(string))
+	}
 
-	// 	field := reader.fields[i]
-	// 	start := field.Start
-	// 	end   := field.End
+	return values
+}
 
-	// 	var value string
-	// 	if end == 0 {
-	// 		value = record[start:]
-	// 	} else {
-	// 		value = record[start:end]
-	// 	}
+func StructKeys(x interface{}) []string {
+	v := reflect.TypeOf(x)
+	keys := make([]string, v.NumField())
 
-	// 	f.SetString(strings.Trim(value, " "))
-	// }
-	// return nil
+	for i := 0; i < v.NumField(); i++ {
+		colname := v.Field(i).Tag.Get("field")
+		keys[i] = colname
+	}
+
+	return keys
+}
+
+func TabWrite(in interface{}) {
+	w := new(tabwriter.Writer)
+	w.Init(os.Stdout, 5, 8, 1, '\t', tabwriter.AlignRight)
+
+	v := InterfaceSlice(in)
+	header := strings.Join(StructKeys(v[0]), "\t")
+	fmt.Fprintln(w, header)
+
+	for _, val := range v {
+		a := Struct2Array(val)
+		fmt.Fprintln(w, strings.Join(a, "\t"))
+	}
+
+	fmt.Fprintln(w)
+	w.Flush()
 }

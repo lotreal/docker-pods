@@ -29,11 +29,15 @@ func InspectPid(cid string) string {
 // 	t.Log(cmd.Run())
 // }
 
-// func TestState() {
-// 	script := fmt.Sprintf("docker inspect --format='{{.State.Running}}' %s", cid)
-// 	cmd := sh.Command{script}
-// 	t.Log(cmd.Run())
-// }
+func InspectRunning(cid string) string {
+	script := fmt.Sprintf("docker inspect --format='{{.State.Running}}' %s", cid)
+	cmd := sh.Command{script}
+	ret := cmd.Run()[0]
+	if ret == "true" {
+		return "YES"
+	}
+	return "NO"
+}
 
 
 // func TestSn2() {

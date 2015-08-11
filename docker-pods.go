@@ -29,10 +29,10 @@ func main() {
 		},
 		{
 			Name:    "status",
-			Aliases: []string{"s"},
+			Aliases: []string{"ps"},
 			Usage:   "list pods",
 			Action: func(c *cli.Context) {
-				pods.Status()
+				pods.Ps()
 			},
 		},
 	}
