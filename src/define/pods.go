@@ -1,6 +1,7 @@
 package define
 
 import (
+	"io/ioutil"
 	"errors"
 
         "gopkg.in/yaml.v2"
@@ -11,18 +12,6 @@ type Port struct {
         ContainerPort int `yaml:"containerPort"`
 	HostPort int `yaml:"hostPort"`
 }
-
-// func (p *Port) ContainerPort() int {
-// 	fmt.Printf("port: %v", p)
-// 	return p.containerPort
-// }
-
-// func (p *Port) HostPort() int {
-// 	if p.hostPort == 0 {
-// 		return p.ContainerPort
-// 	}
-// 	return p.hostPort
-// }
 
 type VolumeMounts struct {
         Name string
@@ -45,6 +34,7 @@ type Container struct {
 }
 
 type Pod struct {
+	Id   string
 	Kind string
 	Spec struct {
 		Containers []Container
@@ -59,4 +49,16 @@ func (p *Pod) Parse(data []byte) error {
 		return errors.New("pods: invalid `kind`")
 	}
 	return nil
+}
+
+func Pods(file string) (Pod, error) {
+	var p Pod
+
+	data, err := ioutil.ReadFile(file)
+        if err != nil {
+		return p, err
+        }
+
+	p.Parse(data)
+	return p, nil
 }

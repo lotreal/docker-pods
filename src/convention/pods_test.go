@@ -29,6 +29,7 @@ func TestPodsNotExist(t *testing.T) {
 func TestPodsDir1(t *testing.T) {
 	pods := root
 	p, err := convention.Pods(pods)
+	t.Log(p)
 	if err == nil && len(p) != 1 {
 		t.Fatalf("%s should return []string{1}", pods)
 	}
