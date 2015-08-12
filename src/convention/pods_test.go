@@ -1,7 +1,6 @@
 package convention_test
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/lotreal/docker-pods/src/convention"
@@ -13,33 +12,40 @@ var root = "/root/.go/src/github.com/lotreal/docker-pods/examples"
 
 func TestPodsEmpty(t *testing.T) {
 	pods := root + "/empty.yaml"
-	_, err := convention.CheckPods(pods)
-	if err == nil ||  err.Error() != fmt.Sprintf("%s is empty", pods) {
-		t.Fatalf("%s should notice empty error", pods)
+	_, err := convention.Pods(pods)
+	if err == nil ||  err != convention.ErrNoPods {
+		t.Fatalf("%s should throw error", pods)
 	}
 }
 
 func TestPodsNotExist(t *testing.T) {
 	pods := root + "/null.yaml"
-	_, err := convention.CheckPods(pods)
-	if err == nil ||  err.Error() != fmt.Sprintf("%s not exist", pods) {
-		t.Fatalf("%s should notice not exist error", pods)
+	_, err := convention.Pods(pods)
+	if err == nil ||  err != convention.ErrNoPods {
+		t.Fatalf("%s should throw error", pods)
 	}
 }
 
-func TestPodsIsDir(t *testing.T) {
+func TestPodsDir1(t *testing.T) {
 	pods := root
-	_, err := convention.CheckPods(pods)
-	if err == nil ||  err.Error() != fmt.Sprintf("%s is dir", pods) {
-		t.Fatalf("%s should notice is dir error", pods)
+	p, err := convention.Pods(pods)
+	if err == nil && len(p) != 1 {
+		t.Fatalf("%s should return []string{1}", pods)
 	}
 }
 
-
-func TestPods2(t *testing.T) {
-	t.Log(convention.FindPodsInDir("/data/maokai"))
+func TestPodsDir2(t *testing.T) {
+	pods := root + "/opt"
+	p, err := convention.Pods(pods)
+	if err == nil && len(p) != 2 {
+		t.Fatalf("%s should return []string{2}", pods)
+	}
 }
 
-func TestPods3(t *testing.T) {
-	t.Log(convention.FindPodsInDir("."))
+func TestPodsDir3(t *testing.T) {
+	pods := root + "/empty"
+	_, err := convention.Pods(pods)
+	if err == nil ||  err != convention.ErrNoPods {
+		t.Fatalf("%s should throw error", pods)
+	}
 }
