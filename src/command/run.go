@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"strings"
 
-	"github.com/lotreal/docker-pods/src/define"
+	"github.com/lotreal/docker-pods/src/config"
 )
 
 
@@ -16,7 +16,7 @@ func Run(yaml string) (Command, error) {
 		return Command{}, err
         }
 
-	var p define.Pod
+	var p config.Pod
 	if err = p.Parse(data); err != nil {
 		return Command{}, err
 	}

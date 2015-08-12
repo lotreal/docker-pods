@@ -20,7 +20,7 @@ spec:
           mountPath: /etc/httpd/vhost.d/default.conf
 
       env:
-        - key: CONSUL_SERVER
+        - name: CONSUL_SERVER
           value: 115.29.54.118
-        - key: RUN_MODE
+        - name: RUN_MODE
           value: production

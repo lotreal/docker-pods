@@ -1,4 +1,4 @@
-package define
+package config
 
 import (
 	"io/ioutil"
