@@ -7,7 +7,7 @@ import (
 )
 
 func TestPs(t *testing.T) {
-	status := pods.Ps()
+	status := pods.GetStatus()
 	t.Log("$ docker-pods ps")
 	for i := 0; i < len(status); i++ {
 		t.Logf("%#v", status[i])

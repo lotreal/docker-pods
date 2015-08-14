@@ -8,8 +8,6 @@ import (
 )
 
 
-
-
 type Command struct {
 	Script string
 }

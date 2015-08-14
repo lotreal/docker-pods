@@ -21,8 +21,7 @@ type PsOutput struct {
 	Ports       string `field:"PORTS"`
 }
 
-
-func Ps() []PsOutput {
+func GetStatus() []PsOutput {
 	var status []PsOutput
 	status = make([]PsOutput, 0)
 
@@ -32,7 +31,7 @@ func Ps() []PsOutput {
 		cid := p.ContainerId
 
 		status = append(status, PsOutput{
-			Running:      docker.InspectRunning(cid),
+			Running:     docker.InspectRunning(cid),
 			Pid:         docker.InspectPid(cid),
 			ContainerId: cid,
 			Ip:          docker.InspectIp(cid),
@@ -43,7 +42,9 @@ func Ps() []PsOutput {
 		})
 	}
 
-	sh.TabWrite(status)
-
 	return status
+}
+
+func Ps() {
+	sh.TabWrite(GetStatus())
 }

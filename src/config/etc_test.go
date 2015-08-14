@@ -8,10 +8,13 @@ import (
 
 
 func TestEtc(t *testing.T) {
-	data, err := config.Etc()
+	etc, err := config.Etc()
+
+	for _, dir := range etc.Run {
+		t.Log(dir)
+	}
 
         if err != nil {
 		t.Fatalf("Err: #v", err)
         }
-	t.Logf("%#v", data)
 }

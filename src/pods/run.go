@@ -2,21 +2,21 @@ package pods
 
 import (
 	"fmt"
-	"path"
 	"strings"
 
 	"github.com/lotreal/docker-pods/src/config"
+	"github.com/lotreal/docker-pods/src/convention"
 	"github.com/lotreal/docker-pods/src/sh"
 )
 
-func MakeCmd(file string) (string, error) {
-	wd := path.Dir(file)
 
-	p, err := config.Pods(file)
-	if err != nil {
-		return "", err
-	}
+type RunOutput struct {
+	Pid         string `field:"PODS ID"`
+	Pods        string `field:"PODS"`
+	ContainerId string `field:"CONTAINER ID"`
+}
 
+func MakeCmd(p config.Pod) (string, error) {
 	ct := p.Spec.Containers[0]
 
 	args := []string{}
@@ -33,7 +33,7 @@ func MakeCmd(file string) (string, error) {
 	}
 
 	for _,s := range ct.VolumeMounts {
-		args = append(args, fmt.Sprintf("-v \"%s/%s:%s\"", wd, s.HostPath, s.MountPath))
+		args = append(args, fmt.Sprintf("-v \"%s:%s\"", s.HostPath, s.MountPath))
 	}
 
 	args = append(args, ct.Image)
@@ -42,12 +42,61 @@ func MakeCmd(file string) (string, error) {
 	return command, nil
 }
 
-func Run(file string) (string, error) {
-	script, err := MakeCmd(file)
+func RunPods(file string) (RunOutput, error) {
+	var out RunOutput
+	p, err := config.Pods(file)
 	if err != nil {
-		return "", err
+		return out, err
+	}
+
+	script, err := MakeCmd(p)
+	if err != nil {
+		return out, err
 	}
 
 	cmd := sh.Command{script}
-	return cmd.Run()[0], nil
+	fmt.Println(cmd)
+	out = RunOutput{
+		Pid: p.Id,
+		Pods: file,
+		// ContainerId: cmd.Run()[0],
+		ContainerId: "mock",
+	}
+
+	return out, nil
+}
+
+func GetStart() ([]RunOutput, error) {
+	out := make([]RunOutput, 0)
+
+	pods := []string{}
+	etc, err := config.Etc()
+	if err != nil {
+		return out, err
+	}
+
+	for _, dir := range etc.Run {
+		p, _ := convention.Pods(dir)
+		pods = append(pods, p...)
+	}
+
+	for _, p := range pods {
+		o, _ := RunPods(p)
+		out = append(out, o)
+		out = append(out, RunOutput{
+			ContainerId: "x",
+		})
+
+		ps := GetStatus()
+		fmt.Println(ps)
+	}
+
+	return out, nil
+}
+
+func Run() (string, error) {
+	out, _ := GetStart()
+
+	sh.TabWrite(out)
+	return "ok", nil
 }

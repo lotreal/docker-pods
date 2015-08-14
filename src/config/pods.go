@@ -3,6 +3,8 @@ package config
 import (
 	"io/ioutil"
 	"errors"
+	"fmt"
+	"path"
 
         "gopkg.in/yaml.v2"
 )
@@ -60,5 +62,13 @@ func Pods(file string) (Pod, error) {
         }
 
 	p.Parse(data)
+
+	wd := path.Dir(file)
+	vm := p.Spec.Containers[0].VolumeMounts
+
+	for i := 0; i < len(vm); i++ {
+		vm[i].HostPath = fmt.Sprintf("%s/%s", wd, vm[i].HostPath)
+	}
+
 	return p, nil
 }
