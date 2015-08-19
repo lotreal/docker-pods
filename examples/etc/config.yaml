@@ -1,0 +1,10 @@
+run:
+  - /data/maokai
+
+env:
+  - name: X_ENV
+    value: staging
+  - name: X_CONSUL_SERVER
+    value: \"master.consul.local\"
+  - name: X_CONSUL_DC
+    value: nine

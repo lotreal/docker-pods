@@ -17,6 +17,8 @@ type RunOutput struct {
 }
 
 func MakeCmd(p config.Pod) (string, error) {
+	etc, _ := config.Etc()
+
 	ct := p.Spec.Containers[0]
 
 	args := []string{}
@@ -26,6 +28,10 @@ func MakeCmd(p config.Pod) (string, error) {
 
 	for _,s := range ct.Ports {
 		args = append(args, fmt.Sprintf("-p \"%v:%v\"", s.HostPort, s.ContainerPort))
+	}
+
+	for _,s := range etc.Env {
+		args = append(args, fmt.Sprintf("-e \"%v=%v\"", s.Name, s.Value))
 	}
 
 	for _,s := range ct.Env {
@@ -55,12 +61,14 @@ func RunPods(file string) (RunOutput, error) {
 	}
 
 	cmd := sh.Command{script}
-	fmt.Println(cmd)
+	fmt.Println(file)
+	fmt.Println(script)
+	fmt.Println("=============================")
 	out = RunOutput{
 		Pid: p.Id,
 		Pods: file,
-		// ContainerId: cmd.Run()[0],
-		ContainerId: "mock",
+		ContainerId: cmd.Run()[0],
+		// ContainerId: cmd.Mock()[0],
 	}
 
 	return out, nil
@@ -83,12 +91,12 @@ func GetStart() ([]RunOutput, error) {
 	for _, p := range pods {
 		o, _ := RunPods(p)
 		out = append(out, o)
-		out = append(out, RunOutput{
-			ContainerId: "x",
-		})
+		// out = append(out, RunOutput{
+		// 	ContainerId: "x",
+		// })
 
-		ps := GetStatus()
-		fmt.Println(ps)
+		// ps := GetStatus()
+		// fmt.Println(ps)
 	}
 
 	return out, nil

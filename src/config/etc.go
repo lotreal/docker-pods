@@ -9,6 +9,7 @@ import (
 
 type Config struct {
         Run []string
+	Env []Env
 }
 
 func (p *Config) Parse(data []byte) error {

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/codegangsta/cli"
@@ -20,11 +19,11 @@ func main() {
 			Aliases: []string{"r"},
 			Usage:   "docker run a pod",
 			Action: func(c *cli.Context) {
-				// pods.Run(c.Args().First())
+				pods.Run()
 
-				fmt.Printf("%#v\n", c.Args().First())
-				fmt.Printf("%#v\n", c.Args().Present())
-				println("added task: ", c.Args().First())
+				// fmt.Printf("%#v\n", c.Args().First())
+				// fmt.Printf("%#v\n", c.Args().Present())
+				// println("added task: ", c.Args().First())
 			},
 		},
 		{

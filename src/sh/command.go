@@ -36,3 +36,7 @@ func (c *Command) Run() []string {
 	out := string(c.Raw()[:])
 	return strings.Split(out, "\n")
 }
+
+func (c *Command) Mock() []string {
+	return []string{"mock"}
+}

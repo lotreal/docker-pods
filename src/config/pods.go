@@ -55,6 +55,7 @@ func (p *Pod) Parse(data []byte) error {
 
 func Pods(file string) (Pod, error) {
 	var p Pod
+	etc, _ := Etc()
 
 	data, err := ioutil.ReadFile(file)
         if err != nil {
@@ -67,7 +68,14 @@ func Pods(file string) (Pod, error) {
 	vm := p.Spec.Containers[0].VolumeMounts
 
 	for i := 0; i < len(vm); i++ {
-		vm[i].HostPath = fmt.Sprintf("%s/%s", wd, vm[i].HostPath)
+		if vm[i].Name == "config" {
+			vm[i].HostPath = fmt.Sprintf("%s/etc/%s/%s", wd,
+				etc.Env[0].Value,
+				vm[i].HostPath)
+		} else {
+			vm[i].HostPath = fmt.Sprintf("%s/%s", wd,
+				vm[i].HostPath)
+		}
 	}
 
 	return p, nil

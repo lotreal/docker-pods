@@ -14,6 +14,8 @@ func TestEtc(t *testing.T) {
 		t.Log(dir)
 	}
 
+	t.Logf("%#v", etc)
+
         if err != nil {
 		t.Fatalf("Err: #v", err)
         }
