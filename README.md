@@ -32,20 +32,23 @@ YES     maokai  055d1b6a69bd    10.0.1.12       docker.web.dm/apache-php        
 
 ```bash
 # copy template
-cp -a /app/maokai /a/maokai
+cp -a ${TEMPLATE}/maokai ${RUN_MAOKAI}
 
-cd /a/maokai && make update
+run/maokai_a maokai_a
+maokai_b
+
+cd ${RUN_MAOKAI} && make update
 
 gen consul.json: /var/docker-pods/maokai/a/consul.json
 docker run
 
 
-|------+---------------+---------------------+-----------+-----------+----|
-| TYPE | ID            | DESC                | DIR       |        IP | ST |
-|------+---------------+---------------------+-----------+-----------+----|
-| www* | maokai:latest | v1.0.4-2-g90b13c2-a | /a/maokai | 10.0.1.12 | OK |
-| www  | maokai        | v1.0.4-2-f61691e6-b | /b/maokai | 10.0.1.13 | OK |
-|------+---------------+---------------------+-----------+-----------+----|
+|------+--------+---------------------+--------------------+-----------+----|
+| TYPE | ID     | DESC                | DIR                |        IP | ST |
+|------+--------+---------------------+--------------------+-----------+----|
+| www* | maokai | v1.0.4-2-latest-a   | /dpod/run/maokai-a | 10.0.1.12 | OK |
+| www  | maokai | v1.0.4-2-f61691e6-b | /dpod/run/maokai-b | 10.0.1.13 | OK |
+|------+--------+---------------------+--------------------+-----------+----|
 
 
 build:
