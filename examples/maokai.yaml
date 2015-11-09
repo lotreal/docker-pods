@@ -1,0 +1,66 @@
+id: maokai
+apiVersion: v1
+type: www
+
+default:
+  build:
+    type: template
+    path: /var/dockerpods/app/maokai
+
+staging:
+  build:
+    type: foo
+    command: make
+
+build:
+  default:
+    type: template
+    path: /var/dockerpods/app/maokai
+
+run:
+  default:
+    image: docker.web.dm/apache-php
+
+    volumeMounts:
+      - type: www
+        hostPath: .
+        mountPath: /srv/www
+
+      - type: config
+        hostPath: consul.json
+        mountPath: /etc/consul.d/web.json
+
+      - type: config
+        hostPath: httpd.conf
+        mountPath: /etc/httpd/vhost.d/default.conf
+
+  production:
+    ports:
+      - containerPort: 80
+        hostPort: 8080
+
+
+kind: Pod
+
+spec:
+  containers:
+    - name: www
+      image: docker.web.dm/apache-php
+      ports:
+        - containerPort: 80
+          hostPort: 8080
+
+      volumeMounts:
+        - name: consul
+          hostPath: etc/production/consul.json
+          mountPath: /etc/consul.d/web.json
+
+        - name: httpd
+          hostPath: etc/production/httpd.conf
+          mountPath: /etc/httpd/vhost.d/default.conf
+
+      env:
+        - name: CONSUL_SERVER
+          value: 115.29.54.118
+        - name: RUN_MODE
+          value: production
