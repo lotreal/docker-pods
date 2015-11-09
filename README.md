@@ -29,3 +29,26 @@ $ docker-pods ps
 RUNNING PODS ID CONTAINER ID    IP ADDR         IMAGE                           COMMAND                 STATUS          PORTS
 YES     maokai  055d1b6a69bd    10.0.1.12       docker.web.dm/apache-php        "/usr/local/bin/star    Up 1 seconds    80/tcp
 ```
+
+```bash
+# copy template
+cp -a /app/maokai /a/maokai
+
+cd /a/maokai && make update
+
+gen consul.json: /var/docker-pods/maokai/a/consul.json
+docker run
+
+
+|------+---------------+---------------------+-----------+-----------+----|
+| TYPE | ID            | DESC                | DIR       |        IP | ST |
+|------+---------------+---------------------+-----------+-----------+----|
+| www* | maokai:latest | v1.0.4-2-g90b13c2-a | /a/maokai | 10.0.1.12 | OK |
+| www  | maokai        | v1.0.4-2-f61691e6-b | /b/maokai | 10.0.1.13 | OK |
+|------+---------------+---------------------+-----------+-----------+----|
+
+
+build:
+template: /app/maokai
+
+```
