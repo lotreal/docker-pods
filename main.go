@@ -23,16 +23,17 @@ func main() {
 		},
 	}
 	app.Action = func(c *cli.Context) {
-		println(c.String("lang"))
-		name := "someone"
-		if len(c.Args()) > 0 {
-			name = c.Args()[0]
-		}
-		if c.String("lang") == "spanish" {
-			println("Hola", name)
-		} else {
-			println("Hello", name)
-		}
+		pods.Ps()
+		// println(c.String("lang"))
+		// name := "someone"
+		// if len(c.Args()) > 0 {
+		// 	name = c.Args()[0]
+		// }
+		// if c.String("lang") == "spanish" {
+		// 	println("Hola", name)
+		// } else {
+		// 	println("Hello", name)
+		// }
 	}
 
 	app.Commands = []cli.Command{

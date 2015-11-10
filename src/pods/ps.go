@@ -11,8 +11,8 @@ import (
 
 type PsOutput struct {
 	Pid         string `field:"LABEL"`
-	ContainerId string `field:"CONTAINER ID"`
-	Ip          string `field:"IP ADDR"`
+	ContainerId string `field:"CONTAINER"`
+	Ip          string `field:"IP"`
 	Image       string `field:"IMAGE"`
 	Command     string `field:"COMMAND"`
 	Status      string `field:"STATUS"`
