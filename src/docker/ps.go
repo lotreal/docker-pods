@@ -1,12 +1,10 @@
 package docker
 
-
 import (
 	"io"
 
 	"github.com/lotreal/docker-pods/src/sh"
 )
-
 
 type PsOutput struct {
 	ContainerId string `field:"CONTAINER ID"`
@@ -21,7 +19,8 @@ type PsOutput struct {
 func Ps() []PsOutput {
 	cmd := sh.Command{"docker ps -a"}
 
-	var reader = sh.NewReader(cmd.Run(), PsOutput{})
+	lines, _ := cmd.Lines()
+	var reader = sh.NewReader(lines, PsOutput{})
 
 	var status []PsOutput
 	status = make([]PsOutput, 0)

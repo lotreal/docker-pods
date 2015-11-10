@@ -10,7 +10,7 @@ import (
 
 var busybox = (func() string {
 	cmd := sh.Command{"docker run -d -it busybox sh"}
-	return cmd.Run()[0][0:12]
+	return cmd.Ok()[0:12]
 })()
 
 func TestInit(t *testing.T) {
@@ -33,5 +33,5 @@ func TestState(t *testing.T) {
 func TestRm(t *testing.T) {
 	script := fmt.Sprintf("docker rm -f %s", busybox)
 	cmd := sh.Command{script}
-	t.Log(cmd.Run())
+	t.Log(cmd.Ok())
 }

@@ -16,4 +16,4 @@ install-deps:
 
 .PHONY: test
 test:
-	go test src/sh/command_test.go
+	go test -v src/sh/command_test.go

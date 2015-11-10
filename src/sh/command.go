@@ -41,6 +41,11 @@ func (c *Command) Lines() ([]string, error) {
 	return lines, err
 }
 
+func (c *Command) Ok() string {
+	out, _ := c.Run()
+	return out
+}
+
 func (c *Command) Mock() []string {
 	return []string{"mock"}
 }
