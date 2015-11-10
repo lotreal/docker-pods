@@ -1,0 +1,57 @@
+package pods
+
+import (
+	"github.com/lotreal/docker-pods/src/config"
+	"github.com/lotreal/docker-pods/src/convention"
+	"github.com/lotreal/docker-pods/src/sh"
+)
+
+// git describe
+// git rev-list --count --first-parent HEAD
+
+// maokai:rev21:a
+// maokai:v1.0.4-2-g90b13c2:a
+
+// maokai  a:v1.0.4-327  /a/maokai  10.0.1.3
+// maokai  b:v1.0.4-329  /b/maokai  10.0.1.4
+
+type RunOutput struct {
+	Pid         string `field:"PODS ID"`
+	Pods        string `field:"PODS"`
+	ContainerId string `field:"CONTAINER ID"`
+}
+
+func GetStart() ([]RunOutput, error) {
+	out := make([]RunOutput, 0)
+
+	pods := []string{}
+	etc, err := config.Etc()
+	if err != nil {
+		return out, err
+	}
+
+	for _, dir := range etc.Run {
+		p, _ := convention.Pods(dir)
+		pods = append(pods, p...)
+	}
+
+	for _, p := range pods {
+		o, _ := RunPods(p)
+		out = append(out, o)
+		// out = append(out, RunOutput{
+		// 	ContainerId: "x",
+		// })
+
+		// ps := GetStatus()
+		// fmt.Println(ps)
+	}
+
+	return out, nil
+}
+
+func List() (string, error) {
+	out, _ := getlist()
+
+	sh.TabWrite(out)
+	return "ok", nil
+}

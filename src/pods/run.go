@@ -9,7 +9,6 @@ import (
 	"github.com/lotreal/docker-pods/src/sh"
 )
 
-
 type RunOutput struct {
 	Pid         string `field:"PODS ID"`
 	Pods        string `field:"PODS"`
@@ -26,19 +25,19 @@ func MakeCmd(p config.Pod) (string, error) {
 
 	args = append(args, fmt.Sprintf("-l \"pid=%v\"", p.Id))
 
-	for _,s := range ct.Ports {
+	for _, s := range ct.Ports {
 		args = append(args, fmt.Sprintf("-p \"%v:%v\"", s.HostPort, s.ContainerPort))
 	}
 
-	for _,s := range etc.Env {
+	for _, s := range etc.Env {
 		args = append(args, fmt.Sprintf("-e \"%v=%v\"", s.Name, s.Value))
 	}
 
-	for _,s := range ct.Env {
+	for _, s := range ct.Env {
 		args = append(args, fmt.Sprintf("-e \"%v=%v\"", s.Name, s.Value))
 	}
 
-	for _,s := range ct.VolumeMounts {
+	for _, s := range ct.VolumeMounts {
 		args = append(args, fmt.Sprintf("-v \"%s:%s\"", s.HostPath, s.MountPath))
 	}
 
@@ -65,9 +64,9 @@ func RunPods(file string) (RunOutput, error) {
 	fmt.Println(script)
 	fmt.Println("=============================")
 	out = RunOutput{
-		Pid: p.Id,
-		Pods: file,
-		ContainerId: cmd.Run()[0],
+		Pid:         p.Id,
+		Pods:        file,
+		ContainerId: cmd.Ok(),
 		// ContainerId: cmd.Mock()[0],
 	}
 

@@ -15,9 +15,9 @@ func main() {
 	app.Usage = "manage your dockers"
 	app.Version = "0.0.1"
 
-	app.Flags = []cli.Flag {
+	app.Flags = []cli.Flag{
 		cli.StringFlag{
-			Name: "lang",
+			Name:  "lang",
 			Value: "english",
 			Usage: "language for the greeting",
 		},
@@ -40,9 +40,9 @@ func main() {
 			Name:    "test",
 			Aliases: []string{"t"},
 			Usage:   "test",
-			Flags: []cli.Flag {
-				cli.StringFlag {
-					Name: "lang",
+			Flags: []cli.Flag{
+				cli.StringFlag{
+					Name:  "lang",
 					Value: "english",
 					Usage: "language for the greeting",
 				},
@@ -58,7 +58,7 @@ func main() {
 			Aliases: []string{"l"},
 			Usage:   "list pods",
 			Action: func(c *cli.Context) {
-				pods.List()
+				// pods.List()
 			},
 		},
 		{

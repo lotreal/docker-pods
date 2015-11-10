@@ -13,7 +13,7 @@ func InspectIp(cid string) string {
 }
 
 func InspectPid(cid string) string {
-	script := fmt.Sprintf("docker inspect --format='{{.Config.Labels.pid}}' %s", cid)
+	script := fmt.Sprintf("docker inspect --format='{{.Config.Labels.name}}' %s", cid)
 	cmd := sh.Command{script}
 	ret := cmd.Ok()
 	if ret == "<no value>" {

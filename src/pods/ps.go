@@ -1,7 +1,7 @@
 package pods
 
 import (
-        //"fmt"
+	//"fmt"
 	// "os"
 	// "text/tabwriter"
 
@@ -9,16 +9,15 @@ import (
 	"github.com/lotreal/docker-pods/src/sh"
 )
 
-
 type PsOutput struct {
-	Running     string `field:"RUNNING"`
-	Pid         string `field:"PODS ID"`
+	Pid         string `field:"LABEL"`
 	ContainerId string `field:"CONTAINER ID"`
 	Ip          string `field:"IP ADDR"`
 	Image       string `field:"IMAGE"`
 	Command     string `field:"COMMAND"`
 	Status      string `field:"STATUS"`
 	Ports       string `field:"PORTS"`
+	Running     string `field:"RUNNING"`
 }
 
 func GetStatus() []PsOutput {
