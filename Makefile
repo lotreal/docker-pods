@@ -1,5 +1,5 @@
 GO ?= go
-GOPATH := $(CURDIR)/_vendor:$(GOPATH)
+GOPATH := $(CURDIR)/vendor:$(GOPATH)
 
 all: build
 
@@ -11,10 +11,14 @@ install:
 
 .PHONY: install-deps
 install-deps:
-	go get gopkg.in/yaml.v2
-	go get github.com/codegangsta/cli
-	go get github.com/stretchr/testify
+	$(GO) get gopkg.in/yaml.v2
+	$(GO) get github.com/codegangsta/cli
+	$(GO) get github.com/stretchr/testify
+
+.PHONY: run
+run:
+	$(GO) run -v main.go
 
 .PHONY: test
 test:
-	go test -v src/sh/command_test.go
+	$(GO) test -v src/sh/command_test.go
